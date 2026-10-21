@@ -1,0 +1,6 @@
+{
+  "name": "CriptoFull",
+  "description": "Aplicativo completo de Criptomoedas em Kotlin: cotações em tempo real, gráficos dinâmicos, carteira e conversor.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
