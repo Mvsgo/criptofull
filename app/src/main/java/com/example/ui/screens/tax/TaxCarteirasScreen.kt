@@ -49,6 +49,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import com.example.ui.components.CryptoComboBox
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -158,27 +159,6 @@ fun TaxCarteirasScreen(
                             color = TextSecondary
                         )
                     }
-
-                    Button(
-                        onClick = { showAddDialog = true },
-                        colors = ButtonDefaults.buttonColors(containerColor = CyanNeon),
-                        shape = RoundedCornerShape(10.dp),
-                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = null,
-                            tint = CryptoDarkBackground,
-                            modifier = Modifier.size(16.dp)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = "Nova Carteira",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = CryptoDarkBackground
-                        )
-                    }
                 }
             }
 
@@ -286,39 +266,16 @@ fun TaxCarteirasScreen(
                 }
             }
 
-            // Filter Chips
+            // Filtro por Tipo de Carteira (ComboBox)
             item {
-                LazyRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    contentPadding = PaddingValues(horizontal = 2.dp)
-                ) {
-                    items(listOf("Todas", "Exchanges", "Software", "Hardware")) { filter ->
-                        val isSelected = selectedFilter == filter
-                        FilterChip(
-                            selected = isSelected,
-                            onClick = { selectedFilter = filter },
-                            label = {
-                                Text(
-                                    text = filter,
-                                    fontSize = 12.sp,
-                                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
-                                )
-                            },
-                            colors = FilterChipDefaults.filterChipColors(
-                                selectedContainerColor = CyanNeon.copy(alpha = 0.2f),
-                                selectedLabelColor = CyanNeon,
-                                containerColor = CryptoDarkSurface,
-                                labelColor = TextSecondary
-                            ),
-                            border = FilterChipDefaults.filterChipBorder(
-                                enabled = true,
-                                selected = isSelected,
-                                borderColor = if (isSelected) CyanNeon else CryptoCardBorder
-                            )
-                        )
-                    }
-                }
+                CryptoComboBox(
+                    label = "Filtrar por Tipo de Carteira",
+                    selectedOption = selectedFilter,
+                    options = listOf("Todas", "Exchanges", "Software", "Hardware"),
+                    onOptionSelected = { selectedFilter = it },
+                    leadingIcon = Icons.Default.AccountBalanceWallet,
+                    testTag = "filter_carteiras_combo"
+                )
             }
 
             // Carteiras List
@@ -380,6 +337,19 @@ fun TaxCarteirasScreen(
             item {
                 Spacer(modifier = Modifier.height(60.dp))
             }
+        }
+
+        // Floating Action Button matching TaxOperacoesScreen with only '+' icon
+        FloatingActionButton(
+            onClick = { showAddDialog = true },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(20.dp)
+                .testTag("add_carteira_fab"),
+            containerColor = CyanNeon,
+            contentColor = CryptoDarkBackground
+        ) {
+            Icon(imageVector = Icons.Default.Add, contentDescription = "Nova Carteira")
         }
     }
 

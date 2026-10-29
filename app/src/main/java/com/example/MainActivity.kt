@@ -45,6 +45,7 @@ import com.example.ui.screens.CoinDetailScreen
 import com.example.ui.screens.MarketScreen
 import com.example.ui.screens.tax.TaxApuracaoScreen
 import com.example.ui.screens.tax.TaxCarteirasScreen
+import com.example.ui.screens.tax.TaxConfiguracoesScreen
 import com.example.ui.screens.tax.TaxEstoqueScreen
 import com.example.ui.screens.tax.TaxImportarScreen
 import com.example.ui.screens.tax.TaxOperacoesScreen
@@ -102,7 +103,7 @@ fun CriptoFullApp(viewModel: CryptoViewModel) {
         is Screen.Carteiras -> NavItem.Carteiras
         is Screen.Estoque -> NavItem.Estoque
         is Screen.Relatorios -> NavItem.Relatorios
-        is Screen.Importar -> NavItem.Operacoes
+        is Screen.Importar, is Screen.Configuracoes -> NavItem.Operacoes
         is Screen.Mercado, is Screen.CoinDetail -> NavItem.Apuracao
     }
 
@@ -181,6 +182,10 @@ fun CriptoFullApp(viewModel: CryptoViewModel) {
                 is Screen.Importar -> {
                     BackHandler { viewModel.navigateBack() }
                     TaxImportarScreen(viewModel = viewModel)
+                }
+                is Screen.Configuracoes -> {
+                    BackHandler { viewModel.navigateBack() }
+                    TaxConfiguracoesScreen(viewModel = viewModel)
                 }
                 is Screen.Mercado -> {
                     BackHandler { viewModel.navigateBack() }

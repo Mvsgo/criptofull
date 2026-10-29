@@ -34,6 +34,7 @@ sealed class Screen {
     object Importar : Screen()
     object Relatorios : Screen()
     object Estoque : Screen()
+    object Configuracoes : Screen()
     object Mercado : Screen()
     data class CoinDetail(val coin: Coin) : Screen()
 }
@@ -320,6 +321,12 @@ class CryptoViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    fun updateLancamento(lancamento: LancamentoEntity) {
+        viewModelScope.launch {
+            repository.updateLancamento(lancamento)
+        }
+    }
+
     fun deleteLancamento(id: Long) {
         viewModelScope.launch {
             repository.deleteLancamento(id)
@@ -418,13 +425,20 @@ class CryptoViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    private var _previousScreen: Screen = Screen.Operacoes
+
     fun navigateTo(screen: Screen) {
+        if (_currentScreen.value != screen) {
+            _previousScreen = _currentScreen.value
+        }
         _currentScreen.value = screen
     }
 
     fun navigateBack() {
         if (_currentScreen.value is Screen.CoinDetail) {
             _currentScreen.value = Screen.Mercado
+        } else if (_currentScreen.value is Screen.Configuracoes || _currentScreen.value is Screen.Importar) {
+            _currentScreen.value = _previousScreen
         } else {
             _currentScreen.value = Screen.Apuracao
         }

@@ -34,6 +34,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import com.example.ui.components.CryptoComboBox
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -173,42 +174,16 @@ fun MarketScreen(
             Spacer(modifier = Modifier.height(10.dp))
         }
 
-        // Filter Chips Horizontal Scroll
+        // Category Selector ComboBox
         item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                categories.forEach { cat ->
-                    val isSelected = selectedCategory == cat
-                    FilterChip(
-                        selected = isSelected,
-                        onClick = { viewModel.setSelectedCategory(cat) },
-                        label = {
-                            Text(
-                                text = cat,
-                                fontSize = 12.sp,
-                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
-                            )
-                        },
-                        colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = CyanNeon.copy(alpha = 0.2f),
-                            selectedLabelColor = CyanNeon,
-                            containerColor = CryptoDarkSurface,
-                            labelColor = TextSecondary
-                        ),
-                        border = FilterChipDefaults.filterChipBorder(
-                            enabled = true,
-                            selected = isSelected,
-                            borderColor = if (isSelected) CyanNeon else CryptoCardBorder
-                        ),
-                        modifier = Modifier.testTag("category_chip_$cat")
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(6.dp))
+            CryptoComboBox(
+                label = "Categoria de Criptoativos",
+                selectedOption = selectedCategory,
+                options = categories,
+                onOptionSelected = { viewModel.setSelectedCategory(it) },
+                testTag = "category_combo_box"
+            )
+            Spacer(modifier = Modifier.height(4.dp))
         }
 
         // Coin List Title

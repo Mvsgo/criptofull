@@ -200,14 +200,22 @@ class ExchangeStatementImporter {
             }
         }
 
-        // Clean symbol (e.g., BTCBRL -> BTC, ETH/USDT -> ETH)
+        // Clean symbol (e.g., BTCBRL -> BTC, ETHUSDT -> ETH, ETHBTC -> ETH, SOLBNB -> SOL)
         var cleanSymbol = symbolRaw.uppercase().replace("/", "").replace("_", "").replace("-", "")
         if (cleanSymbol.endsWith("BRL")) {
             cleanSymbol = cleanSymbol.removeSuffix("BRL")
         } else if (cleanSymbol.endsWith("USDT")) {
             cleanSymbol = cleanSymbol.removeSuffix("USDT")
+        } else if (cleanSymbol.endsWith("USDC")) {
+            cleanSymbol = cleanSymbol.removeSuffix("USDC")
         } else if (cleanSymbol.endsWith("USD")) {
             cleanSymbol = cleanSymbol.removeSuffix("USD")
+        } else if (cleanSymbol.endsWith("BTC") && cleanSymbol.length > 3) {
+            cleanSymbol = cleanSymbol.removeSuffix("BTC")
+        } else if (cleanSymbol.endsWith("BNB") && cleanSymbol.length > 3) {
+            cleanSymbol = cleanSymbol.removeSuffix("BNB")
+        } else if (cleanSymbol.endsWith("ETH") && cleanSymbol.length > 3) {
+            cleanSymbol = cleanSymbol.removeSuffix("ETH")
         }
         if (cleanSymbol.isBlank()) cleanSymbol = "BTC"
 

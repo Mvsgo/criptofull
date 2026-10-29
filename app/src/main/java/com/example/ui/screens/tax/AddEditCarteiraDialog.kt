@@ -34,6 +34,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import com.example.ui.components.CryptoComboBox
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -172,77 +173,26 @@ fun AddEditCarteiraDialog(
                     }
                 }
 
-                // Tipo de Carteira
-                Column {
-                    Text(
-                        text = "Tipo de Custódia:",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = TextSecondary,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
-                    LazyRow(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        contentPadding = PaddingValues(horizontal = 2.dp)
-                    ) {
-                        items(tiposDisponiveis) { (codigo, label) ->
-                            val isSelected = tipo == codigo
-                            FilterChip(
-                                selected = isSelected,
-                                onClick = { tipo = codigo },
-                                label = { Text(label, fontSize = 11.sp, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal) },
-                                colors = FilterChipDefaults.filterChipColors(
-                                    selectedContainerColor = CyanNeon.copy(alpha = 0.2f),
-                                    selectedLabelColor = CyanNeon,
-                                    containerColor = CryptoDarkSurfaceVariant,
-                                    labelColor = TextSecondary
-                                ),
-                                border = FilterChipDefaults.filterChipBorder(
-                                    enabled = true,
-                                    selected = isSelected,
-                                    borderColor = if (isSelected) CyanNeon else CryptoCardBorder
-                                )
-                            )
-                        }
-                    }
-                }
+                // Tipo de Carteira (ComboBox)
+                val selectedTipoLabel = tiposDisponiveis.firstOrNull { it.first == tipo }?.second ?: "Corretora / Exchange"
+                CryptoComboBox(
+                    label = "Tipo de Custódia:",
+                    selectedOption = selectedTipoLabel,
+                    options = tiposDisponiveis.map { it.second },
+                    onOptionSelected = { label ->
+                        tipo = tiposDisponiveis.firstOrNull { it.second == label }?.first ?: "EXCHANGE"
+                    },
+                    testTag = "dialog_carteira_tipo_combo"
+                )
 
-                // Provedor / Corretora / Plataforma
-                Column {
-                    Text(
-                        text = "Provedor / Corretora:",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = TextSecondary,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
-                    LazyRow(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        contentPadding = PaddingValues(horizontal = 2.dp)
-                    ) {
-                        items(corretorasDisponiveis) { ex ->
-                            val isSelected = corretora == ex
-                            FilterChip(
-                                selected = isSelected,
-                                onClick = { corretora = ex },
-                                label = { Text(ex, fontSize = 11.sp, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal) },
-                                colors = FilterChipDefaults.filterChipColors(
-                                    selectedContainerColor = CyanNeon.copy(alpha = 0.2f),
-                                    selectedLabelColor = CyanNeon,
-                                    containerColor = CryptoDarkSurfaceVariant,
-                                    labelColor = TextSecondary
-                                ),
-                                border = FilterChipDefaults.filterChipBorder(
-                                    enabled = true,
-                                    selected = isSelected,
-                                    borderColor = if (isSelected) CyanNeon else CryptoCardBorder
-                                )
-                            )
-                        }
-                    }
-                }
+                // Provedor / Corretora / Plataforma (ComboBox)
+                CryptoComboBox(
+                    label = "Provedor / Corretora:",
+                    selectedOption = corretora,
+                    options = corretorasDisponiveis,
+                    onOptionSelected = { corretora = it },
+                    testTag = "dialog_carteira_corretora_combo"
+                )
 
                 // Cor do Identificador
                 Column {

@@ -45,6 +45,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import com.example.ui.components.CryptoComboBox
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -169,42 +170,16 @@ fun TaxImportarScreen(
             }
         }
 
-        // Exchange Selector Chips
+        // Exchange Selector ComboBox
         item {
-            Column {
-                Text(
-                    text = "Selecione a Corretora de Origem:",
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = TextPrimary
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                LazyRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    contentPadding = PaddingValues(horizontal = 2.dp)
-                ) {
-                    items(exchangeList) { ex ->
-                        val isSelected = selectedExchange == ex
-                        FilterChip(
-                            selected = isSelected,
-                            onClick = { selectedExchange = ex },
-                            label = { Text(ex, fontSize = 12.sp, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal) },
-                            colors = FilterChipDefaults.filterChipColors(
-                                selectedContainerColor = CyanNeon.copy(alpha = 0.2f),
-                                selectedLabelColor = CyanNeon,
-                                containerColor = CryptoDarkSurface,
-                                labelColor = TextSecondary
-                            ),
-                            border = FilterChipDefaults.filterChipBorder(
-                                enabled = true,
-                                selected = isSelected,
-                                borderColor = if (isSelected) CyanNeon else CryptoCardBorder
-                            )
-                        )
-                    }
-                }
-            }
+            CryptoComboBox(
+                label = "Selecione a Corretora ou Formato:",
+                selectedOption = selectedExchange,
+                options = exchangeList,
+                onOptionSelected = { selectedExchange = it },
+                leadingIcon = Icons.Default.CloudUpload,
+                testTag = "import_exchange_combo"
+            )
         }
 
         // Upload Card
